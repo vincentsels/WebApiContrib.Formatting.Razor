@@ -27,7 +27,7 @@ namespace WebApiContrib.Formatting.Razor
 
             foreach(var viewLocationFormat in _viewLocationFormats)
             {
-                var potentialViewPathFormat = viewLocationFormat.Replace("~", GetPhysicalSiteRootPath(siteRootPath));
+                var potentialViewPathFormat = viewLocationFormat.Replace("~", path);
 
                 var viewPath = string.Format(potentialViewPathFormat, view.ViewName);
 
@@ -41,11 +41,7 @@ namespace WebApiContrib.Formatting.Razor
         internal static string GetPhysicalSiteRootPath(string siteRootPath)
         {
             if (string.IsNullOrWhiteSpace(siteRootPath))
-                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase)
-                           .Replace("file:\\", string.Empty)
-                           .Replace("\\bin", string.Empty)
-                           .Replace("\\Debug", string.Empty)
-                           .Replace("\\Release", string.Empty);
+                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase.Replace("file:///", string.Empty).Replace("file://localhost/", string.Empty).Replace("/bin", string.Empty).Replace("/Debug", string.Empty).Replace("/Release", string.Empty));
 
             return siteRootPath;
         }
